@@ -1,10 +1,31 @@
 package com.dio.santander.bankline.api.model;
 
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity //dizer ao JPA que tem uma nova entidade
+@Table(name = "tab_movimentacao")
 public class Movimentacao {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)//geração de chave automática 
 	private Integer id;
+	
+	@Column(name = "data_hora")
 	private LocalDateTime dataHora;
+	
 	private String descricao;
 	private Double valor;
+	
+	@Enumerated(EnumType.STRING) // vai salvar o próprio valor literal
 	private MovimentacaoTipo tipo;
 	
 	public Integer getId() {
