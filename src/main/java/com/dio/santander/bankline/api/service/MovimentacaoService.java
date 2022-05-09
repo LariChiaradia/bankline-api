@@ -21,16 +21,22 @@ public class MovimentacaoService {
 	private CorrentistaRepository correntistaRepository;
 	public void save(NovaMovimentacao novaMovimentacao) {
 		Movimentacao movimentacao = new Movimentacao();
-		Double valor = novaMovimentacao.getTipo()==MovimentacaoTipo.RECEITA ? novaMovimentacao.getValor() : novaMovimentacao.getValor() * -1;
+		
+		//Double valor = novaMovimentacao.getTipo()==MovimentacaoTipo.RECEITA ? novaMovimentacao.getValor() : novaMovimentacao.getValor() * -1;
+		
+		Double Valor = novaMovimentacao.getValor();
+		if(novaMovimentacao.getTipo()==MovimentacaoTipo.DESPESA)
+			Valor = Valor * -1;
+		
 		movimentacao.setDataHora(LocalDateTime.now());
 		movimentacao.setDescricao(novaMovimentacao.getDescricao());
 		movimentacao.setIdconta(novaMovimentacao.getIdConta());
 		movimentacao.setTipo(novaMovimentacao.getTipo());
-		movimentacao.setValor(valor);
+		movimentacao.setValor(Valor);
 		
 		Correntista correntista = correntistaRepository.findById(novaMovimentacao.getIdConta()).orElse(null);
 		if(correntista != null) {
-			correntista.getConta().setSaldo(correntista.getConta().getSaldo() + valor);
+			correntista.getConta().setSaldo(correntista.getConta().getSaldo() + Valor);
 			correntistaRepository.save(correntista);
 		}
 		
