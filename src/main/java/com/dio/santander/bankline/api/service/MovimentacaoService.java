@@ -24,22 +24,23 @@ public class MovimentacaoService {
 		
 		//Double valor = novaMovimentacao.getTipo()==MovimentacaoTipo.RECEITA ? novaMovimentacao.getValor() : novaMovimentacao.getValor() * -1;
 		
-		Double Valor = novaMovimentacao.getValor();
-		if(novaMovimentacao.getTipo()==MovimentacaoTipo.DESPESA)
-			Valor = Valor * -1;
-		
+		Double valor = novaMovimentacao.getValor();
+		if(novaMovimentacao.getTipo() == MovimentacaoTipo.DESPESA)
+			valor = valor * -1;
+			
 		movimentacao.setDataHora(LocalDateTime.now());
 		movimentacao.setDescricao(novaMovimentacao.getDescricao());
-		movimentacao.setIdconta(novaMovimentacao.getIdConta());
+		movimentacao.setIdConta(novaMovimentacao.getIdConta());
 		movimentacao.setTipo(novaMovimentacao.getTipo());
-		movimentacao.setValor(Valor);
+		movimentacao.setValor(valor);
 		
 		Correntista correntista = correntistaRepository.findById(novaMovimentacao.getIdConta()).orElse(null);
 		if(correntista != null) {
-			correntista.getConta().setSaldo(correntista.getConta().getSaldo() + Valor);
+			correntista.getConta().setSaldo(correntista.getConta().getSaldo() + valor);
 			correntistaRepository.save(correntista);
 		}
 		
 		repository.save(movimentacao);
+		
 	}
 }
